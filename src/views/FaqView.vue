@@ -25,7 +25,8 @@ const searchKeyword = computed(() => String(route.query.wrd ?? ''))
 
 const condition = ref(searchCondition.value)
 const keyword = ref(searchKeyword.value)
-const openId = ref<string | null>(null)
+// /faq/:faqId 로 들어오면 그 항목을 펼친 채로 연다 — 메인에서 특정 질문을 누른 경우다.
+const openId = ref<string | null>((route.params.faqId as string) ?? null)
 
 watch([searchCondition, searchKeyword], ([cnd, wrd]) => {
   condition.value = cnd

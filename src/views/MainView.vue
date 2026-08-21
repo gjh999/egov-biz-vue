@@ -69,7 +69,7 @@ const faqs = computed(() => data.value?.faqList ?? [])
             <AppFeedback v-if="faqs.length === 0" state="empty" />
             <ul v-else class="list-unstyled mb-0">
               <li v-for="faq in faqs" :key="faq.faqId" class="py-2 border-bottom">
-                <RouterLink :to="`/faq`" class="text-truncate d-block">{{ faq.qestnSj }}</RouterLink>
+                <RouterLink :to="`/faq/${faq.faqId}`" class="text-truncate d-block">{{ faq.qestnSj }}</RouterLink>
               </li>
             </ul>
           </div>

@@ -1,6 +1,6 @@
 import { computed, readonly, ref } from 'vue'
 import { authApi } from '../api/auth'
-import type { CurrentUser } from '../api/auth'
+import type { CurrentUser, UserSe } from '../api/auth'
 import { setUnauthorizedHandler } from '../api/client'
 
 /**
@@ -33,8 +33,8 @@ export async function initAuth(): Promise<void> {
 }
 
 export function useAuth() {
-  const login = async (id: string, password: string) => {
-    await authApi.login(id, password)
+  const login = async (id: string, password: string, userSe?: UserSe) => {
+    await authApi.login(id, password, userSe)
     // 로그인 응답에는 roles 가 없다 — 권한까지 담긴 정보를 /auth/me 로 다시 받는다
     user.value = await authApi.me()
   }

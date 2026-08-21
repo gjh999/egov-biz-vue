@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuth } from '../auth/useAuth'
+import type { UserSe } from '../api/auth'
 import { useI18n } from '../i18n/useI18n'
 import { ApiError } from '../api/client'
 
@@ -10,6 +11,8 @@ const { login } = useAuth()
 const router = useRouter()
 const route = useRoute()
 
+// 사용자 구분에 따라 서버가 조회하는 테이블이 다르다 — 잘못 고르면 비밀번호가 맞아도 실패한다.
+const userSe = ref<UserSe>('GNR')
 const id = ref('')
 const password = ref('')
 const error = ref<string | null>(null)
@@ -19,7 +22,7 @@ async function handleSubmit() {
   error.value = null
   submitting.value = true
   try {
-    await login(id.value, password.value)
+    await login(id.value, password.value, userSe.value)
     // 라우트 가드가 남겨 둔 원래 목적지로 돌려보낸다
     const redirect = (route.query.redirect as string | undefined) ?? '/'
     await router.replace(redirect)
@@ -42,6 +45,19 @@ async function handleSubmit() {
         <div class="krds-panel-body">
           <form novalidate @submit.prevent="handleSubmit">
             <div v-if="error" class="krds-alert danger mb-3" role="alert">{{ error }}</div>
+
+            <div class="form-group">
+              <div class="form-tit">
+                <label for="login-userse">{{ t('login.userSe', '사용자 구분') }}</label>
+              </div>
+              <div class="form-conts">
+                <select id="login-userse" v-model="userSe" class="krds-select">
+                  <option value="GNR">{{ t('login.userSe.gnr', '일반회원') }}</option>
+                  <option value="ENT">{{ t('login.userSe.ent', '기업회원') }}</option>
+                  <option value="USR">{{ t('login.userSe.usr', '업무사용자') }}</option>
+                </select>
+              </div>
+            </div>
 
             <div class="form-group">
               <div class="form-tit">
@@ -80,6 +96,12 @@ async function handleSubmit() {
               {{ submitting ? t('com.processing', '처리 중…') : t('login.submit', '로그인') }}
             </button>
           </form>
+
+          <!-- 계정이 없는 사람이 로그인 화면에서 막히지 않도록 가입 경로를 함께 둔다. -->
+          <p class="text-center text-muted mt-3 mb-0">
+            {{ t('login.noAccount', '아직 회원이 아니신가요?') }}
+            <RouterLink to="/join">{{ t('nav.join', '회원가입') }}</RouterLink>
+          </p>
         </div>
       </div>
     </div>

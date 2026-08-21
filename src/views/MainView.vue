@@ -10,7 +10,8 @@ const { t } = useI18n()
 const { data, loading, error, reload } = useAsync(() => mainApi.summary())
 
 const noticeBbsId = computed(() => data.value?.noticeBbsId ?? NOTICE_BBS_ID)
-const banners = computed(() => data.value?.bannerList ?? [])
+// 이름이 없는 배너는 화면에 빈 배지만 남기므로 거른다.
+const banners = computed(() => (data.value?.bannerList ?? []).filter((banner) => banner.bannerNm?.trim()))
 const notices = computed(() => data.value?.noticeList ?? [])
 const faqs = computed(() => data.value?.faqList ?? [])
 </script>
@@ -24,8 +25,8 @@ const faqs = computed(() => data.value?.faqList ?? [])
 
     <section v-if="banners.length > 0" class="mb-4" :aria-label="t('main.banner', '배너')">
       <ul class="list-unstyled d-flex flex-wrap gap-3 mb-0">
-        <li v-for="banner in banners" :key="banner.bannerId">
-          <a v-if="banner.bannerUrl" :href="banner.bannerUrl" class="krds-btn secondary">{{ banner.bannerNm }}</a>
+        <li v-for="(banner, index) in banners" :key="banner.bannerId || `banner-${index}`">
+          <a v-if="banner.linkUrl" :href="banner.linkUrl" class="krds-btn secondary">{{ banner.bannerNm }}</a>
           <span v-else class="krds-badge bg-gray">{{ banner.bannerNm }}</span>
         </li>
       </ul>

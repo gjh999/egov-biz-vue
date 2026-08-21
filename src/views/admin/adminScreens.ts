@@ -277,20 +277,20 @@ export const ADMIN_SCREENS: Record<string, (t: Translate) => AdminScreen<any>> =
     rowKey: (row) => row.bannerId,
     columns: [
       { header: t('banner.name', '배너명'), alignStart: true, value: (row) => row.bannerNm },
-      { header: t('banner.url', '링크'), alignStart: true, value: (row) => row.bannerUrl ?? '-' },
+      { header: t('banner.url', '링크'), alignStart: true, value: (row) => row.linkUrl ?? '-' },
       { header: t('banner.order', '순서'), width: '10%', value: (row) => row.sortOrdr ?? '-' },
       useAtColumn(t),
     ],
     fields: [
       { name: 'bannerNm', label: t('banner.name', '배너명'), required: true },
-      { name: 'bannerUrl', label: t('banner.url', '링크 URL') },
+      { name: 'linkUrl', label: t('banner.url', '링크 URL') },
       { name: 'bannerDc', label: t('banner.desc', '설명'), type: 'textarea' },
       { name: 'sortOrdr', label: t('banner.order', '정렬순서'), type: 'number' },
       useAtField(t),
     ],
     toFormValues: (row) => ({
       bannerNm: row.bannerNm ?? '',
-      bannerUrl: row.bannerUrl ?? '',
+      linkUrl: row.linkUrl ?? '',
       bannerDc: row.bannerDc ?? '',
       sortOrdr: String(row.sortOrdr ?? ''),
       useAt: row.useAt ?? 'Y',

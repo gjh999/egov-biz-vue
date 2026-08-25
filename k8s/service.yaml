@@ -1,0 +1,15 @@
+# 클러스터 밖에서 접근하려면 Ingress 를 앞에 두거나 type 을 NodePort/LoadBalancer 로 바꾼다.
+apiVersion: v1
+kind: Service
+metadata:
+  name: egov-biz-vue
+  labels:
+    app: egov-biz-vue
+spec:
+  type: ClusterIP
+  selector:
+    app: egov-biz-vue
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
